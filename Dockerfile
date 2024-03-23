@@ -1,7 +1,7 @@
 FROM golang:alpine as builder
 ARG LDFLAGS=""
 
-RUN apk --update --no-cache add git build-base gcc
+RUN apk --update --no-cache add git build-base gcc pkgconf zeromq zeromq-dev
 
 COPY . /build
 WORKDIR /build
@@ -29,6 +29,7 @@ LABEL org.opencontainers.image.licenses="${LICENSE}"
 LABEL org.opencontainers.image.revision="${REV}"
 
 RUN apk update --no-cache && \
+    apk add zeromq && \
     adduser -S -D -H -h / flow
 USER flow
 COPY --from=builder /build/goflow2 /
